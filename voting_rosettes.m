@@ -73,7 +73,7 @@ imagesc((im_new));axis image;colormap gray;title('Detected Region(s) after votin
 linkaxes
 
 %converting mask to binary values for processing
-mask=mask==7;
+mask=mask>=4;
 % filling the mask
 closing_mask(1:7,1:7)=logical(1);
 mask=closing(mask,closing_mask,6);
@@ -94,6 +94,10 @@ imwrite(uint8(255*temp),savePath);
 savePath=fullfile(pathname,[filename(1:end-5) 'mask.tif']);
 imwrite(mask,savePath);
 
+
+savePath=fullfile(pathname,[filename(1:end-5) 'filtered_image.tif']);
+filtered_image=double(mask).*temp;
+imwrite(filtered_image,savePath);
 %ctFIRE;
 
 return
