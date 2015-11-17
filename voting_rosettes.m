@@ -1,3 +1,6 @@
+% adding path to ctFIRE
+addpath('C:\Users\S.S. Mehta\Desktop\Github_UWLOCI\curvelets\ctFIRE');
+
 clc
 close all
 clear all
@@ -68,4 +71,23 @@ subplot(259);hold off
 imagesc((im_new));axis image;colormap gray;title('Detected Region(s) after voting');
 
 linkaxes
+
+%converting mask to binary values for processing
+mask=mask==7;
+% filling the mask
+closing_mask(1:5,1:5)=logical(1);
+mask=closing(mask,closing_mask,4);
+
+%plotting the boundaries
+B=bwboundaries(mask);
+for k2 = 1:length(B)
+     boundary = B{k2};
+     plot(boundary(:,2), boundary(:,1), 'y', 'LineWidth', 2);%boundary need not be dilated now because we are using plot function now
+end
+
+%saving the mean image
+savePath=fullfile(pathname,[filename(1:end-5) 'mean.tif']);
+imwrite(uint8(255*temp),savePath);
+%ctFIRE;
+
 return
