@@ -6,11 +6,18 @@ function [imout]=closing(image,mask,num_ops)
     % erosion operation is done. default value of number is 1
     if(nargin==2),num_ops=1;end
     imout=image;
+    figure;
+    subplot(121);imagesc(image);
     for i=1:num_ops
         imout=dilation(imout,mask);
+        subplot(122);imagesc(imout);
+        %pause(2);
     end
        
     for i=1:num_ops
         imout=erosion(imout,mask);
+        subplot(122);imagesc(imout);
+       % pause(2);
     end
+    
 end

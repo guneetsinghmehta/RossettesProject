@@ -75,9 +75,10 @@ linkaxes
 %converting mask to binary values for processing
 mask=mask==7;
 % filling the mask
-closing_mask(1:5,1:5)=logical(1);
-mask=closing(mask,closing_mask,4);
+closing_mask(1:7,1:7)=logical(1);
+mask=closing(mask,closing_mask,6);
 
+figure;imagesc(mask);hold on;
 %plotting the boundaries
 B=bwboundaries(mask);
 for k2 = 1:length(B)
@@ -85,9 +86,14 @@ for k2 = 1:length(B)
      plot(boundary(:,2), boundary(:,1), 'y', 'LineWidth', 2);%boundary need not be dilated now because we are using plot function now
 end
 
-%saving the mean image
+%saving the mean image and the mask . image as a uint8 and mask as a
+%logical image
 savePath=fullfile(pathname,[filename(1:end-5) 'mean.tif']);
 imwrite(uint8(255*temp),savePath);
+
+savePath=fullfile(pathname,[filename(1:end-5) 'mask.tif']);
+imwrite(mask,savePath);
+
 %ctFIRE;
 
 return
