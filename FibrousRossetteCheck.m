@@ -1,4 +1,4 @@
-function[answer]=FibrousRossetteCheck(mask,pathname,filename)
+function[fiberBoundaryAngle]=FibrousRossetteCheck(mask,pathname,filename)
     [s1Image,s2Image]=size(mask);answer=0;%default
     % boundary contains two columns of x and y coordinates of all bnd points
     B=bwboundaries(mask);
@@ -41,6 +41,8 @@ function[answer]=FibrousRossetteCheck(mask,pathname,filename)
             sizeFibers=size(matdata.data.Fa,2);
             fiber_indices(1:sizeFibers,1:3)=0;
             sizeEllipseBoundaryPoints=size(ellipse_boundary,1);
+            fiberBoundaryAngle=[];
+            count=1;
             for k=1:sizeFibers
                 fiber_indices(k,1)=k; fiber_indices(k,2)=0; 
                 point_indices=matdata.data.Fa(1,k).v;
@@ -58,6 +60,25 @@ function[answer]=FibrousRossetteCheck(mask,pathname,filename)
                         x_cord(m)=matdata.data.Xa(point_indices(m),1);
                         y_cord(m)=matdata.data.Xa(point_indices(m),2);
                         if(ellipse_boundary(n,2)==x_cord(m)&&ellipse_boundary(n,1)==y_cord(m))
+                            ellipse_point1x=ellipse_boundary(n-1,2);ellipse_point1y=ellipse_boundary(n-1,1);
+                           ellipse_point2x=ellipse_boundary(n+1,2);ellipse_point2y=ellipse_boundary(n+1,1);
+                            
+                           if(m==1)
+                            fiber_point1x=x_cord(m);fiber_point1y=y_cord(m);
+                           else
+                            fiber_point1x=x_cord(m-1);fiber_point1y=y_cord(m-1);
+                           end
+                           if(m==numPointsInFiber)
+                            fiber_point2x=x_cord(m);fiber_point2y=y_cord(m);
+                           else
+                               fiber_point2x=x_cord(m+1);fiber_point2y=y_cord(m+1);
+                           end
+                           
+
+                           v1=[ellipse_point1y-ellipse_point2y;ellipse_point1x-ellipse_point2x];
+                           v2=[fiber_point1y-fiber_point2y;fiber_point1x-fiber_point2x];
+                           fiberBoundaryAngle(count)=180/pi*acos(dot(v1/norm(v1),v2/norm(v2)));
+                           count=count+1;
                            fiber_indices(k,2)=1; 
                            FLAG=1;break;
                         end
@@ -69,7 +90,7 @@ function[answer]=FibrousRossetteCheck(mask,pathname,filename)
                 end
             end
             
-            
+             title(['Average angle is=' num2str(mean(fiberBoundaryAngle))]);
             
     end    
    
