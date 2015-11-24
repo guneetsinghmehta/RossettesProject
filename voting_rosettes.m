@@ -15,7 +15,7 @@ for k = 1:7
    temp=double(imread(filename2));
    temp = medfilt2(temp,[3,3]);
    temp = temp-min(temp(:));
-   z(:,:,k) = temp/max(temp(:));
+   z(:,:,k) = temp/max(temp(:));% should be max-previous min -- error . resolve after 24th Nov meeting
 end
 % z has the normalized image
 x = sum(z,3);
@@ -50,42 +50,29 @@ for k = 1:7
    end     
    mask=mask+mask_temp;
 end
-
+mask_backup=mask;
 %New image before voting procedure with all detcted regions
 subplot(258);hold off
 imagesc((mask));axis image;colormap gray;title('Detected Region(s)');
 
 im_new=temp;%temp stores the mean value of pixels along all the stacks
 [r_im c_im]=size(im_new);
-
-for i=1:r_im
-    for j=1:c_im
-        if mask(i,j)<7   %if detected less than 7 times, eliminate that region 
-           im_new(i,j)=0;  %and force its pixel value as zero
-        end
-    end
-end
-
-%Final detected region(s)
-subplot(259);hold off
-imagesc((im_new));axis image;colormap gray;title('Detected Region(s) after voting');
-
 linkaxes
 
 %converting mask to binary values for processing
-mask=mask>=4;
-% filling the mask
+mask=mask_backup>=6;
+mask2=mask_backup>=7;
+    % filling the mask
 closing_mask(1:7,1:7)=logical(1);
 mask=closing(mask,closing_mask,6);
-
 figure;imagesc(mask);hold on;
-%plotting the boundaries
+
+%plotting the boundaries and saving images- starts
 B=bwboundaries(mask);
 for k2 = 1:length(B)
      boundary = B{k2};
      plot(boundary(:,2), boundary(:,1), 'y', 'LineWidth', 2);%boundary need not be dilated now because we are using plot function now
 end
-
 %saving the mean image and the mask . image as a uint8 and mask as a
 %logical image
 savePath=fullfile(pathname,[filename(1:end-5) 'mean.tif']);
@@ -94,10 +81,12 @@ imwrite(uint8(255*temp),savePath);
 savePath=fullfile(pathname,[filename(1:end-5) 'mask.tif']);
 imwrite(mask,savePath);
 
-
 savePath=fullfile(pathname,[filename(1:end-5) 'filtered_image.tif']);
 filtered_image=double(mask).*temp;
 imwrite(filtered_image,savePath);
+%plotting the boundaries and saving images- ends
 %ctFIRE;
 
-return
+%sending mask and boundary to a function for classifying rossettes with
+%fibres sticking out of it
+fibrous_rossette_present=FibrousRosetteCheck(mask);
