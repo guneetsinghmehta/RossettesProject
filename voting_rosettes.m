@@ -89,4 +89,4 @@ imwrite(filtered_image,savePath);
 
 %sending mask and boundary to a function for classifying rossettes with
 %fibres sticking out of it
-fibrous_rossette_present=FibrousRosetteCheck(mask);
+fibrous_rossette_present=FibrousRosetteCheck(mask,filename);
