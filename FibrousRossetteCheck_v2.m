@@ -1,4 +1,4 @@
-function[fiberBoundaryAngle]=FibrousRossetteCheck(mask,pathname,filename)
+function[fiberBoundaryAngle]=FibrousRossetteCheck_v2(mask,pathname,filename)
     [s1Image,s2Image]=size(mask);answer=0;%default
     % boundary contains two columns of x and y coordinates of all bnd points
     B=bwboundaries(mask);
@@ -9,7 +9,7 @@ function[fiberBoundaryAngle]=FibrousRossetteCheck(mask,pathname,filename)
     for k2 = 1:length(B)
         plot(boundary(:,2,k2), boundary(:,1,k2), 'y', 'LineWidth', 2);%boundary need not be dilated now because we are using plot function now
         boundaryTemp=boundary(:,:,k2);
-        [A,c]=MinVolEllipse(boundary',0.1);
+        [A,c]=MinVolEllipse(boundaryTemp',0.01);
         ellipse_mask(1:s1Image,1:s2Image)=0;
         for i=1:s1Image
             for j=1:s2Image
@@ -47,7 +47,7 @@ function[fiberBoundaryAngle]=FibrousRossetteCheck(mask,pathname,filename)
                 fiber_indices(k,1)=k; fiber_indices(k,2)=0; 
                 point_indices=matdata.data.Fa(1,k).v;
                 numPointsInFiber=size(point_indices,2);
-                x_cord=[];y_cord=[];
+                %x_cord=[];y_cord=[];
                 for m=1:numPointsInFiber
                     x_cord(m)=matdata.data.Xa(point_indices(m),1);
                     y_cord(m)=matdata.data.Xa(point_indices(m),2);
