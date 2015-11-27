@@ -25,3 +25,4 @@ Output - metadata VotingData - field1 - slices
   3. mask made from ellipse, tolerance level
   4. angle data of all fibers with respect to boundary
 		    
+ classifier 2 basis - angle - 80 to 100 and num of fibers>10
