@@ -29,42 +29,20 @@ display(numSlices);
     h = hist(temp(:)/max(temp(:)),50);
     z(:,:,numSlices+1) = temp;
     [r c]=size(z);
-
 mask=zeros(r);mask_temp=zeros(r);
+
 %classifier 1 - voting
 areaMin=7000;areaMax=1e5;distribution=0;threshold=0.6;
-base=0.4;step=0.1;
+base=0.3;step=0.2;
 mask=classifierVoting(numSlices,z,h,areaMin,areaMax,distribution,threshold,base,step);
 
-mask_backup=mask;
-%New image before voting procedure with all detcted regions
-im_new=temp;%temp stores the mean value of pixels along all the stacks
+%taking backups
+ mask_backup=mask;im_new=temp;%temp stores the mean value of pixels along all the stacks
 
-%converting mask to binary values for processing
-closing_mask(1:7,1:7)=logical(1);
-mask=closing(mask,closing_mask,6);
-figure;imagesc(mask);hold on;
+mask=smoothClassifierVotingMask(mask);
 
-%plotting the boundaries and saving images- starts
-B=bwboundaries(mask);
-for k2 = 1:length(B)
-     boundary = B{k2};
-     plot(boundary(:,2), boundary(:,1), 'y', 'LineWidth', 2);%boundary need not be dilated now because we are using plot function now
-end
-%saving the mean image and the mask . image as a uint8 and mask as a
-%logical image
-savePath=fullfile(pathname,[filename(1:end-5) 'mean.tif']);
-imwrite(uint8(255*temp),savePath);
+% mask=removeSmallAreas(mask,areaMin,areaMax);
 
-savePath=fullfile(pathname,[filename(1:end-5) 'mask.tif']);
-imwrite(mask,savePath);
+saveImages(pathname,filename,temp,mask);
 
-savePath=fullfile(pathname,[filename(1:end-5) 'filtered_image.tif']);
-filtered_image=double(mask).*temp;
-imwrite(filtered_image,savePath);
-%plotting the boundaries and saving images- ends
-%ctFIRE;
-
-%sending mask and boundary to a function for classifying rossettes with
-%fibres sticking out of it
-fibrous_rossette_present=FibrousRosetteCheck(mask,filename);
+% fibrous_rossette_present=FibrousRosetteCheck(mask,filename);

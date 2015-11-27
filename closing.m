@@ -8,16 +8,32 @@ function [imout]=closing(image,mask,num_ops)
     imout=image;
     figure;
     subplot(121);imagesc(image);
-    for i=1:num_ops
-        imout=dilation(imout,mask);
+    se=strel('disk',5);
+    
+    %removing fibrous things
+    subops=2;
+    for i=1:subops
+         imout=imerode(imout,se);
         subplot(122);imagesc(imout);
-        %pause(2);
+        pause(1);
+    end
+    for i=1:subops
+         imout=imdilate(imout,se);
+        subplot(122);imagesc(imout);
+        pause(1);
+    end
+    
+    
+    for i=1:num_ops
+        imout=imdilate(imout,se);
+        subplot(122);imagesc(imout);
+        pause(1);
     end
        
     for i=1:num_ops
-        imout=erosion(imout,mask);
+        imout=imerode(imout,se);
         subplot(122);imagesc(imout);
-       % pause(2);
+       pause(1);
     end
     
 end

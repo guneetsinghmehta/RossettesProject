@@ -1,4 +1,4 @@
-1 save ND2 files to tiff
+1 Done save ND2 files to tiff 
 2 make the algo modular
 3 Test voting on zero, one , two 3 and 4
 4 ctFIRE - change to mask the fibers with -1 and +1
