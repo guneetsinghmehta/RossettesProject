@@ -32,8 +32,8 @@ display(numSlices);
 mask=zeros(r);mask_temp=zeros(r);
 
 %classifier 1 - voting
-areaMin=7000;areaMax=1e5;distribution=0;threshold=0.6;
-base=0.3;step=0.2;
+areaMin=2000;areaMax=1e5;distribution=0;threshold=0.6;
+base=0.4;step=0.1;
 mask=classifierVoting(numSlices,z,h,areaMin,areaMax,distribution,threshold,base,step);
 
 %taking backups
@@ -41,8 +41,8 @@ mask=classifierVoting(numSlices,z,h,areaMin,areaMax,distribution,threshold,base,
 
 mask=smoothClassifierVotingMask(mask);
 
-% mask=removeSmallAreas(mask,areaMin,areaMax);
-
+mask=removeSmallAreas(mask,areaMin,areaMax);
+figure;imagesc(mask);title('mask after removing small areas');
 saveImages(pathname,filename,temp,mask);
 
 % fibrous_rossette_present=FibrousRosetteCheck(mask,filename);
