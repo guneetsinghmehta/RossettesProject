@@ -1,6 +1,5 @@
 % adding path to ctFIRE
 addpath('C:\Users\S.S. Mehta\Desktop\Github_UWLOCI\curvelets\ctFIRE');
-
 clc
 close all
 clear all
