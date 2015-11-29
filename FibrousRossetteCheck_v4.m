@@ -1,4 +1,4 @@
-function[fiberBoundaryAngle]=FibrousRossetteCheck_v4(mask,pathname,filename)
+function[outVar]=FibrousRossetteCheck_v4(mask,pathname,filename)
     [s1Image,s2Image]=size(mask);answer=0;%default
     % boundary contains two columns of x and y coordinates of all bnd points
     B=bwboundaries(mask);
@@ -78,6 +78,7 @@ function[fiberBoundaryAngle]=FibrousRossetteCheck_v4(mask,pathname,filename)
                     plot(y_cord,x_cord,'LineStyle','-','color',color1,'linewidth',0.005);%hold on;
                 end
             end
+            outVar{k2}=fiberBoundaryAngle;
             title(['Average angle is=' num2str(mean(fiberBoundaryAngle))]);
             text(mean(ellipse_boundary(:,2)),mean(ellipse_boundary(:,1)),num2str(mean(fiberBoundaryAngle)),'color',[1 1 1]);
     end    
@@ -88,16 +89,16 @@ function[fiberBoundaryAngle]=FibrousRossetteCheck_v4(mask,pathname,filename)
         for n=2:size(ellipse_boundary,1)-1
            x1=point1(1);y1=point1(2);
            x2=point2(1);y2=point2(2);
-           text(y1,x1,'point1','color',[1,1,1]);
-           text(y2,x2,'point2','color',[1,1,1]);
+%            text(y1,x1,'point1','color',[1,1,1]);
+%            text(y2,x2,'point2','color',[1,1,1]);
            
            xe1=ellipse_boundary(n-1,1);ye1=ellipse_boundary(n-1,2);
            xe2=ellipse_boundary(n+1,1);ye2=ellipse_boundary(n+1,2);
            
            dist1=distanceFromLine(x1,x2,y1,y2,xe1,ye1);
            dist2=distanceFromLine(x1,x2,y1,y2,xe2,ye2);
-           text(ellipse_boundary(n,2),ellipse_boundary(n,1),num2str(sign(dist1*dist2)),'color',[1,1,1]);
-           fprintf('%f\n',sign(dist1*dist2));
+%            text(ellipse_boundary(n,2),ellipse_boundary(n,1),num2str(sign(dist1*dist2)),'color',[1,1,1]);
+%            fprintf('%f\n',sign(dist1*dist2));
            if(sign(dist1*dist2)==-1)
               v1=[y1-y2;x1-x2];
               v2=[ye1-ye2;xe1-xe2];
