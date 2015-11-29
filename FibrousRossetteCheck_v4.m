@@ -78,9 +78,17 @@ function[outVar]=FibrousRossetteCheck_v4(mask,pathname,filename)
                     plot(y_cord,x_cord,'LineStyle','-','color',color1,'linewidth',0.005);%hold on;
                 end
             end
-            outVar{k2}=fiberBoundaryAngle;
+            outVar{k2}=fiberBoundaryAngle;%cotains all angles  
             title(['Average angle is=' num2str(mean(fiberBoundaryAngle))]);
-            text(mean(ellipse_boundary(:,2)),mean(ellipse_boundary(:,1)),num2str(mean(fiberBoundaryAngle)),'color',[1 1 1]);
+            text(mean(ellipse_boundary(:,2)),mean(ellipse_boundary(:,1)),[num2str(mean(fiberBoundaryAngle)) '  ' num2str(size(fiberBounaryAngle))],'color',[1 1 1]);
+            
+            % got the results for angles and number of fibers
+            % based on angles and number of fibers we remove the areas
+            mask2=mask;
+            numThreshold=10;
+            angleMinThreshold=80;
+            angleMaxThreshold=100;
+            
     end    
     
    
@@ -103,7 +111,7 @@ function[outVar]=FibrousRossetteCheck_v4(mask,pathname,filename)
               v1=[y1-y2;x1-x2];
               v2=[ye1-ye2;xe1-xe2];
               angle=180/pi*acos(dot(v1/norm(v1),v2/norm(v2)));
-              display(angle);
+%               display(angle);
                return; 
            end
           % pause(0.1);
