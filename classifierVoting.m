@@ -13,7 +13,11 @@ function[maskResult]=classifierVoting(numSlices,z,h,areaMin,areaMax,distribution
 %initialisation
     [s1,s2,s3]=size(z);mask=zeros(s1,s2);mask_temp=zeros(s1,s2);
     %gives a distribution with total sum=1;
-    if(size(distribution)~=numSlices),distribution=getDistribution(base,step,numSlices);end
+    if(size(distribution)~=numSlices),
+        distribution=getDistribution(base,step,numSlices);
+    else
+       distribution=distribution/sum(distribution); 
+    end
     
     for k = 1:numSlices
        % Histogram equalisation
