@@ -12,7 +12,7 @@ display(numSlices);
        %temp = double(imread(['C:\Users\Sanika\Desktop\Rosette Images\Two Rosette\Two Rosettes 40X-1024pix-Z-stack(1.75um step) #1_z00' num2str(k) '_c002.png']));
         filename2=fullfile(pathname,filename);
         filename2=filename2(1:end-10);
-      filename2=[filename2 num2str(k) '_c002.png'];
+      filename2=[filename2 num2str(k) '_c002.tif'];
        temp=double(imread(filename2));
        temp = medfilt2(temp,[3,3]);
        minOld=min(temp(:));
@@ -32,7 +32,7 @@ display(numSlices);
 mask=zeros(r);mask_temp=zeros(r);
 
 %classifier 1 - voting
-areaMin=4000;areaMax=1e5;distribution=0;threshold=0.6;
+areaMin=4000;areaMax=2e5;distribution=0;threshold=0.6;
 base=0.4;step=0.1;
 mask=classifierVoting(numSlices,z,h,areaMin,areaMax,distribution,threshold,base,step);
 

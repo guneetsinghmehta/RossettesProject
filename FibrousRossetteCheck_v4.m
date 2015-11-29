@@ -2,6 +2,7 @@ function[outVar]=FibrousRossetteCheck_v4(mask,pathname,filename)
     [s1Image,s2Image]=size(mask);answer=0;%default
     % boundary contains two columns of x and y coordinates of all bnd points
     B=bwboundaries(mask);
+    mask2=mask;
     for k2 = 1:length(B),
         kip = B{k2};
         boundaryCell{k2}=kip;
@@ -80,16 +81,26 @@ function[outVar]=FibrousRossetteCheck_v4(mask,pathname,filename)
             end
             outVar{k2}=fiberBoundaryAngle;%cotains all angles  
             title(['Average angle is=' num2str(mean(fiberBoundaryAngle))]);
-            text(mean(ellipse_boundary(:,2)),mean(ellipse_boundary(:,1)),[num2str(mean(fiberBoundaryAngle)) '  ' num2str(size(fiberBounaryAngle))],'color',[1 1 1]);
+            text(mean(ellipse_boundary(:,2)),mean(ellipse_boundary(:,1)),[num2str(mean(fiberBoundaryAngle)) ' ' num2str(size(fiberBoundaryAngle))],'color',[1 1 1]);
             
             % got the results for angles and number of fibers
             % based on angles and number of fibers we remove the areas
-            mask2=mask;
+            
             numThreshold=10;
             angleMinThreshold=80;
             angleMaxThreshold=100;
+            meanAngle=mean(fiberBoundaryAngle);
+           if(size(fiberBoundaryAngle)<numThreshold|meanAngle<angleMinThreshold|meanAngle>angleMaxThreshold)
+               negativeMask=~roipoly(mask,boundary(:,2),boundary(:,1));
+                mask2=mask2&negativeMask;
+           end
+           se=strel('disk',5);
+           mask2=imerode(mask2,se);
+           mask2=imdilate(mask2,se);
             
-    end    
+    end
+    figure;imagesc(mask2);colormap gray;title('classifier2 output');
+    figure;imagesc(mask);colormap gray;title('classifier2 input');
     
    
     function[angle]=getAngle(point1,point2,ellipse_boundary)
