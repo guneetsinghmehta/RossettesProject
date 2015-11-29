@@ -65,8 +65,10 @@ function[fiberBoundaryAngle]=FibrousRossetteCheck_v4(mask,pathname,filename)
 
                for m=2:numPointsInFiber-1
                     if(ellipse_mask(x_cord(m-1),y_cord(m-1))*ellipse_mask(x_cord(m+1),y_cord(m+1))==0&&(ellipse_mask(x_cord(m+1),y_cord(m+1))==1||ellipse_mask(x_cord(m+1),y_cord(m+1))==1))
-                        point1=[x_cord(m-1),y_cord(m-1)];
-                        point2=[x_cord(m+1),y_cord(m+1)];
+                        point1=[x_cord(1),y_cord(1)];
+                        point2=[x_cord(end),y_cord(end)];
+                        %using first and last point of the fiber to
+                        %calculate angle
                         fiberBoundaryAngle(count)=getAngle(point1,point2,ellipse_boundary);
                         count=count+1;
                         fiber_indices(k,2)=1;break;
@@ -82,7 +84,13 @@ function[fiberBoundaryAngle]=FibrousRossetteCheck_v4(mask,pathname,filename)
     
    
     function[angle]=getAngle(point1,point2,ellipse_boundary)
-       angle=0;
+       for n=2:size(ellipse_boundary,1)-1
+           x1=point1(1);y1=point1(2);
+           x2=point2(1);y2=point2(2);
+           text(y1,x1,'point1','color',[1,1,1]);
+           text(y2,x2,'point2','color',[1,1,1]);
+       end
+        angle=0;
     end
     
 end
