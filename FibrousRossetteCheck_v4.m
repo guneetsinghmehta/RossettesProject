@@ -89,6 +89,18 @@ function[fiberBoundaryAngle]=FibrousRossetteCheck_v4(mask,pathname,filename)
            x2=point2(1);y2=point2(2);
            text(y1,x1,'point1','color',[1,1,1]);
            text(y2,x2,'point2','color',[1,1,1]);
+           
+           xe1=ellipse_boundary(n-1,1);ye1=ellipse_boundary(n-1,2);
+           xe2=ellipse_boundary(n+1,1);ye2=ellipse_boundary(n+1,2);
+           
+           dist1=distanceFromLine(x1,x2,y1,y2,xe1,ye1);
+           dist2=distanceFromLine(x1,x2,y1,y2,xe2,ye2);
+           text(ellipse_boundary(n,2),ellipse_boundary(n,1),num2str(sign(dist1*dist2)),'color',[1,1,1]);
+           fprintf('%f\n',sign(dist1*dist2));
+           if(sign(dist1*dist2)==-1)
+              break; 
+           end
+           pause(0.1);
        end
         angle=0;
     end
