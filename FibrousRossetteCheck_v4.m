@@ -84,7 +84,8 @@ function[fiberBoundaryAngle]=FibrousRossetteCheck_v4(mask,pathname,filename)
     
    
     function[angle]=getAngle(point1,point2,ellipse_boundary)
-       for n=2:size(ellipse_boundary,1)-1
+       angle=0;
+        for n=2:size(ellipse_boundary,1)-1
            x1=point1(1);y1=point1(2);
            x2=point2(1);y2=point2(2);
            text(y1,x1,'point1','color',[1,1,1]);
@@ -98,11 +99,15 @@ function[fiberBoundaryAngle]=FibrousRossetteCheck_v4(mask,pathname,filename)
            text(ellipse_boundary(n,2),ellipse_boundary(n,1),num2str(sign(dist1*dist2)),'color',[1,1,1]);
            fprintf('%f\n',sign(dist1*dist2));
            if(sign(dist1*dist2)==-1)
-              break; 
+              v1=[y1-y2;x1-x2];
+              v2=[ye1-ye2;xe1-xe2];
+              angle=180/pi*acos(dot(v1/norm(v1),v2/norm(v2)));
+              display(angle);
+               return; 
            end
-           pause(0.1);
+          % pause(0.1);
        end
-        angle=0;
+        
     end
     
 end
